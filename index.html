@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tranceeinleitungen filtern</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2rem;
+      background: #f9f9f9;
+    }
+    h1 {
+      margin-bottom: 1rem;
+    }
+    label {
+      font-weight: bold;
+      margin-top: 1rem;
+    }
+    select {
+      display: block;
+      margin-bottom: 1rem;
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+    .entry {
+      background: white;
+      border-left: 5px solid #4a90e2;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 6px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    .entry h2 {
+      margin-top: 0;
+    }
+    .tags {
+      font-size: 0.9em;
+      color: #666;
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Tranceeinleitungen nach Zielgruppe filtern</h1>
+  <label for="zielgruppe">Zielgruppe:</label>
+  <select id="zielgruppe">
+    <option value="">-- bitte wählen --</option>
+    <option value="A">A – Aphantasie</option>
+    <option value="Ä">Ä – Ängstlichkeit</option>
+    <option value="B">B – Beziehung</option>
+    <option value="E">E – Erschöpfung</option>
+    <option value="K">K – Kontrollzwang</option>
+    <option value="M">M – Mangelfokus</option>
+    <option value="P">P – Perfektionismus</option>
+    <option value="R">R – Religiosität</option>
+    <option value="S">S – Somatisierung</option>
+    <option value="T">T – Trauma</option>
+    <option value="U">U – Unruhe</option>
+    <option value="Z">Z – Zwang</option>
+  </select>
+
+  <div id="output"></div>
+
+  <script>
+    const daten = [
+      { titel: "1.1 Gedanken kommen und gehen lassen", tags: ["M", "U", "E"], text: "Du darfst jetzt einfach nur hier sein. Nichts tun, nichts leisten..." },
+      { titel: "1.2 Gedanken wie Wolken", tags: ["M", "Ä", "B"], text: "Vielleicht kannst du dir vorstellen, dass dein Geist ein weiter Himmel ist..." },
+      { titel: "1.3 Gedanken wie Boote / Blätter auf Wasser", tags: ["M", "B", "S"], text: "Stell dir vor, du sitzt an einem Fluss…" },
+      { titel: "1.4 Gedankenzug – Aussteigen am Bahnhof", tags: ["K", "M", "P"], text: "Lege dich bequem hin und richte dich so aus…" },
+      { titel: "1.5 Gedanken leiser drehen", tags: ["U", "K", "Z"], text: "Setz dich bequem hin. Vielleicht merkst du…" },
+      { titel: "1.6 Gedanken wie Kinobilder", tags: ["M", "K", "Ä"], text: "Lege dich bequem hin und richte deine Aufmerksamkeit…" },
+      { titel: "1.7 Gedankenlosigkeit als Möglichkeit", tags: ["K", "Z", "E"], text: "Lege dich bequem hin, so wie es für dich angenehm ist…" },
+      { titel: "1.8 Gedanken still werden lassen", tags: ["M", "T", "E"], text: "Lege dich bequem hin und schließe deine Augen…" },
+      { titel: "1.9 Gedanken spüren – sprachreduziert", tags: ["Ä", "M", "B"], text: "Wenn du magst, nimm dir einen Moment…" },
+      { titel: "1.10 Gedankenkette lösen", tags: ["Z", "K", "M"], text: "Manche Gedanken haben eine besondere Eigenschaft…" },
+      { titel: "1.11 Gedanken still – spirituell offen", tags: ["R", "E", "M"], text: "Vielleicht magst du jetzt einmal ganz bewusst…" }
+    ];
+
+    const select = document.getElementById("zielgruppe");
+    const output = document.getElementById("output");
+
+    select.addEventListener("change", () => {
+      const value = select.value;
+      output.innerHTML = "";
+      if (!value) return;
+
+      const gefiltert = daten.filter(e => e.tags.includes(value));
+      if (gefiltert.length === 0) {
+        output.innerHTML = "<p>Keine Einleitungen für diese Zielgruppe gefunden.</p>";
+        return;
+      }
+
+      gefiltert.forEach(entry => {
+        const div = document.createElement("div");
+        div.className = "entry";
+        div.innerHTML = \`
+          <h2>\${entry.titel}</h2>
+          <div class="tags">Zielgruppen: \${entry.tags.join(", ")}</div>
+          <div>\${entry.text}</div>
+        \`;
+        output.appendChild(div);
+      });
+    });
+  </script>
+</body>
+</html>
